@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Love Letters</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f9f3f3;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        header {
+            background-color: #e8b4b4;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+        
+        .letter-paper {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .letter-paper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(#f9f9f9 1px, transparent 1px);
+            background-size: 100% 2rem;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .letter-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .date {
+            text-align: right;
+            margin-bottom: 2rem;
+        }
+        
+        .greeting {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .body {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            text-align: justify;
+        }
+        
+        .closing {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .signature {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        
+        button {
+            background-color: #e8b4b4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #d99393;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: #e8b4b4;
+            color: white;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 600px) {
+            .letter-paper {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Digital Love Letters</h1>
+        <p class="subtitle">Express your heart with words</p>
+    </header>
+    
+    <div class="container">
+        <div class="letter-paper">
+            <div class="letter-content">
+                <div class="date" id="current-date">April 7, 2025</div>
+                
+                <p class="greeting">My Dearest <span id="recipient-name">Beloved</span>,</p>
+                
+                <div class="body" id="letter-body">
+                    As I write these words, my heart overflows with emotions I can barely contain. In the quiet moments of my day, my thoughts inevitably drift to you, like leaves carried gently by a stream.
+                    
+                    <br><br>
+                    
+                    Your smile illuminates even my darkest days. Your laughter is the sweetest melody my ears have ever known. When we're apart, I find myself counting the moments until I can see you again, until I can lose myself once more in the warmth of your embrace.
+                    
+                    <br><br>
+                    
+                    With you, I've discovered what it truly means to love and be loved. You've shown me that love isn't just a feeling, but a choice we make every day - to support, to cherish, to grow together through life's winding journey.
+                    
+                    <br><br>
+                    
+                    Forever yours, in this life and beyond.
+                </div>
+                
+                <p class="closing">With all my love,</p>
+                <p class="signature" id="sender-name">Your Secret Admirer</p>
+            </div>
+        </div>
+        
+        <textarea id="custom-message" placeholder="Write your own love letter here..."></textarea>
+        
+        <div class="button-container">
+            <button id="update-letter">Update Letter</button>
+            <button id="download-letter">Download as PDF</button>
+            <button id="share-letter">Share</button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Made with ❤️ | Share the love</p>
+    </footer>
+
+    <script>
+        // Set current date
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').textContent = today.toLocaleDateString('en-US', options);
+        
+        // Update letter functionality
+        document.getElementById('update-letter').addEventListener('click', function() {
+            const customMessage = document.getElementById('custom-message').value;
+            if (customMessage.trim() !== '') {
+                document.getElementById('letter-body').innerHTML = customMessage.replace(/\n/g, '<br>');
+                
+                // Optional: Ask for recipient and sender names
+                const recipient = prompt('Enter the recipient\'s name:', 'Beloved');
+                if (recipient) document.getElementById('recipient-name').textContent = recipient;
+                
+                const sender = prompt('Enter your name:', 'Your Secret Admirer');
+                if (sender) document.getElementById('sender-name').textContent = sender;
+            }
+        });
+        
+        // Download functionality (simplified)
+        document.getElementById('download-letter').addEventListener('click', function() {
+            alert('Download functionality would be implemented with a PDF library like jsPDF.');
+            // In a real implementation, you would:
+            // 1. Use a library like jsPDF
+            // 2. Convert the letter-paper div to PDF
+            // 3. Trigger download
+        });
+        
+        // Share functionality
+        document.getElementById('share-letter').addEventListener('click', function() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'A Love Letter For You',
+                    text: document.getElementById('letter-body').innerText,
+                    url: window.location.href,
+                })
+                .catch((error) => console.log('Error sharing', error));
+            } else {
+                alert('Copy this link to share your love letter: ' + window.location.href);
+            }
+        });
+    </script>
+</body>
+</html>
